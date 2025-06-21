@@ -79,7 +79,7 @@ Running the following command will first search for a random seed for the target
 
 ```
 bash collect_data.sh ${task_name} ${task_config} ${gpu_id}
-# Example: bash collect_data.sh beat_block_hammer demo_randomizd 0
+# Example: bash collect_data.sh beat_block_hammer demo_randomized 0
 ```
 
 ## 2. Task Config
