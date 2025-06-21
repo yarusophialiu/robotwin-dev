@@ -87,9 +87,11 @@ See [RoboTwin 2.0 Tasks Configurations Doc](https://robotwin-platform.github.io/
 
 # 🚴‍♂️ Policy Baselines
 ## Policies Support
-[DP](), [ACT](), [DP3](), [RDT](), [PI0]()
+[DP](https://robotwin-platform.github.io/doc/usage/DP.html), [ACT](https://robotwin-platform.github.io/doc/usage/ACT.html), [DP3](https://robotwin-platform.github.io/doc/usage/DP3.html), [RDT](https://robotwin-platform.github.io/doc/usage/RDT.html), [PI0](https://robotwin-platform.github.io/doc/usage/Pi0.html)
 
-[TinyVLA](), [DexVLA]() (Contributed by Media Group)
+[TinyVLA](https://robotwin-platform.github.io/doc/usage/TinyVLA.html), [DexVLA](https://robotwin-platform.github.io/doc/usage/DexVLA.html) (Contributed by Media Group)
+
+Deploy Your Policy: [guide](https://robotwin-platform.github.io/doc/usage/deploy-your-policy.html)
 
 ⏰ TODO: G3Flow, HybridVLA, DexVLA, OpenVLA-OFT, SmolVLA, AVR, UniVLA
 
