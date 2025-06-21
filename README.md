@@ -1,13 +1,12 @@
 <h1 align="center">
   <a href="https://robotwin-benchmark.github.io"><b>RoboTwin</b> Bimanual Robotic Manipulation Simulation Platform<br></a>
   <small>Lastest Version: RoboTwin 2.0</small><br>
-  
 </h1>
 
-<h2 align="center">
-<a href="https://robotwin-platform.github.io/">Webpage</a> | <a href="https://robotwin-platform.github.io/doc/">Document</a> | <a href="https://robotwin-platform.github.io/doc/community/index.html">Community</a>
-</h2>
+🤲 <a href="https://robotwin-platform.github.io/">Webpage</a> | <a href="https://robotwin-platform.github.io/doc/">Document</a> | <a href="https://robotwin-platform.github.io/doc/community/index.html">Community</a>
 <br>
+
+https://private-user-images.githubusercontent.com/88101805/457546797-95d637f6-685f-416c-afa7-c9258cdc304d.mp4
 
 **[2.0 Version (lastest)]** RoboTwin 2.0: A Scalable Data Generator and Benchmark with Strong Domain Randomization for Robust Bimanual Robotic Manipulation<br>
 <i>Under Review 2025</i>: [PDF](https://robotwin-platform.github.io/paper.pdf) | [arXiv (Coming Soon)]()<br>
