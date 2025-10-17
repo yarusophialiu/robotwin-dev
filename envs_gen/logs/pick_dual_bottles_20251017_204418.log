@@ -1,0 +1,42 @@
+{
+  "task_name": "pick_dual_bottles",
+  "task_description": "Use both arms to simultaneously pick up the bottle1 and bottle2 and move them to the front target locations,                         with the bottle1 on the left and the bottle2 on the right.                        Note: You don't need to open gripper and don't put down the bottles at the end.",
+  "best_success_rate": 0.7,
+  "success_rates": [
+    0.7
+  ],
+  "best_code": "\nfrom envs._base_task import Base_Task\nfrom envs.pick_dual_bottles import pick_dual_bottles\nfrom envs.utils import *\nimport sapien\n\nclass gpt_pick_dual_bottles(pick_dual_bottles):\n    def play_once(self):\n        # Get bottle positions to determine which arm to use for each\n        bottle1_pose = self.bottle1.get_pose()\n        bottle2_pose = self.bottle2.get_pose()\n        bottle1_position = bottle1_pose.p\n        bottle2_position = bottle2_pose.p\n        \n        # Assign arms based on bottle positions (left arm for left bottle, right arm for right bottle)\n        left_arm_tag = ArmTag(\"left\")\n        right_arm_tag = ArmTag(\"right\")\n        \n        # Simultaneously grasp both bottles\n        self.move(\n            self.grasp_actor(actor=self.bottle1, arm_tag=left_arm_tag, pre_grasp_dis=0.1, grasp_dis=0),\n            self.grasp_actor(actor=self.bottle2, arm_tag=right_arm_tag, pre_grasp_dis=0.1, grasp_dis=0)\n        )\n        \n        # Lift both bottles up to avoid collisions\n        self.move(\n            self.move_by_displacement(arm_tag=left_arm_tag, z=0.07, move_axis='world'),\n            self.move_by_displacement(arm_tag=right_arm_tag, z=0.07, move_axis='world')\n        )\n        \n        # Simultaneously move both bottles to their target locations\n        # bottle1 goes to left_target_pose, bottle2 goes to right_target_pose\n        self.move(\n            self.place_actor(\n                actor=self.bottle1,\n                arm_tag=left_arm_tag,\n                target_pose=self.left_target_pose,\n                functional_point_id=0,\n                pre_dis=0.1,\n                dis=0,  # Set to 0 since we don't want to open gripper\n                is_open=False,  # Keep gripper closed to maintain hold\n                constrain=\"free\",\n                pre_dis_axis='fp'\n            ),\n            self.place_actor(\n                actor=self.bottle2,\n                arm_tag=right_arm_tag,\n                target_pose=self.right_target_pose,\n                functional_point_id=0,\n                pre_dis=0.1,\n                dis=0,  # Set to 0 since we don't want to open gripper\n                is_open=False,  # Keep gripper closed to maintain hold\n                constrain=\"free\",\n                pre_dis_axis='fp'\n            )\n        )\n",
+  "best_run_records": [
+    "success!",
+    "success!",
+    "success!",
+    "success!",
+    "success!",
+    "Plan execution failed",
+    "Plan execution failed",
+    "success!",
+    "Plan execution failed",
+    "success!"
+  ],
+  "all_attempts": [
+    {
+      "attempt_id": 1,
+      "success_rate": 0.7,
+      "error_message": "Plan execution failed",
+      "error_count": 3,
+      "code": "\nfrom envs._base_task import Base_Task\nfrom envs.pick_dual_bottles import pick_dual_bottles\nfrom envs.utils import *\nimport sapien\n\nclass gpt_pick_dual_bottles(pick_dual_bottles):\n    def play_once(self):\n        # Get bottle positions to determine which arm to use for each\n        bottle1_pose = self.bottle1.get_pose()\n        bottle2_pose = self.bottle2.get_pose()\n        bottle1_position = bottle1_pose.p\n        bottle2_position = bottle2_pose.p\n        \n        # Assign arms based on bottle positions (left arm for left bottle, right arm for right bottle)\n        left_arm_tag = ArmTag(\"left\")\n        right_arm_tag = ArmTag(\"right\")\n        \n        # Simultaneously grasp both bottles\n        self.move(\n            self.grasp_actor(actor=self.bottle1, arm_tag=left_arm_tag, pre_grasp_dis=0.1, grasp_dis=0),\n            self.grasp_actor(actor=self.bottle2, arm_tag=right_arm_tag, pre_grasp_dis=0.1, grasp_dis=0)\n        )\n        \n        # Lift both bottles up to avoid collisions\n        self.move(\n            self.move_by_displacement(arm_tag=left_arm_tag, z=0.07, move_axis='world'),\n            self.move_by_displacement(arm_tag=right_arm_tag, z=0.07, move_axis='world')\n        )\n        \n        # Simultaneously move both bottles to their target locations\n        # bottle1 goes to left_target_pose, bottle2 goes to right_target_pose\n        self.move(\n            self.place_actor(\n                actor=self.bottle1,\n                arm_tag=left_arm_tag,\n                target_pose=self.left_target_pose,\n                functional_point_id=0,\n                pre_dis=0.1,\n                dis=0,  # Set to 0 since we don't want to open gripper\n                is_open=False,  # Keep gripper closed to maintain hold\n                constrain=\"free\",\n                pre_dis_axis='fp'\n            ),\n            self.place_actor(\n                actor=self.bottle2,\n                arm_tag=right_arm_tag,\n                target_pose=self.right_target_pose,\n                functional_point_id=0,\n                pre_dis=0.1,\n                dis=0,  # Set to 0 since we don't want to open gripper\n                is_open=False,  # Keep gripper closed to maintain hold\n                constrain=\"free\",\n                pre_dis_axis='fp'\n            )\n        )\n",
+      "run_records": [
+        "success!",
+        "success!",
+        "success!",
+        "success!",
+        "success!",
+        "Plan execution failed",
+        "Plan execution failed",
+        "success!",
+        "Plan execution failed",
+        "success!"
+      ]
+    }
+  ]
+}

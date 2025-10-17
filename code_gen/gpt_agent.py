@@ -2,7 +2,7 @@ from openai import OpenAI
 
 kimi_api = "Your key"
 openai_api = "Your key"
-deep_seek_api = "Your key"
+deep_seek_api = "sk-8523b7c37d14408aa3454107fd46c75a"
 
 # Configure the API and key (using DeepSeek as an example)
 def generate(message, gpt="deepseek", temperature=0):
