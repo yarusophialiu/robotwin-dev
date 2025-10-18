@@ -1,0 +1,42 @@
+{
+  "task_name": "pick_dual_bottles",
+  "task_description": "Use both arms to simultaneously pick up the bottle1 and bottle2 and move them to the front target locations,                         with the bottle1 on the left and the bottle2 on the right.                        Note: You don't need to open gripper and don't put down the bottles at the end.",
+  "best_success_rate": 0.7,
+  "success_rates": [
+    0.7
+  ],
+  "best_code": "\nfrom envs._base_task import Base_Task\nfrom envs.pick_dual_bottles import pick_dual_bottles\nfrom envs.utils import *\nimport sapien\n\nclass gpt_pick_dual_bottles(pick_dual_bottles):\n    def play_once(self):\n        # grasping both bottles\n        left_arm = ArmTag(\"left\")\n        right_arm = ArmTag(\"right\")\n        \n        # Grasp bottle1 with left arm\n        self.move(\n            self.grasp_actor(\n                actor=self.bottle1,\n                arm_tag=left_arm,\n                pre_grasp_dis=0.1,\n                grasp_dis=0\n            )\n        )\n        \n        # Grasp bottle2 with right arm\n        self.move(\n            self.grasp_actor(\n                actor=self.bottle2,\n                arm_tag=right_arm,\n                pre_grasp_dis=0.1,\n                grasp_dis=0\n            )\n        )\n        \n        # placing both bottles at their targets with grippers closed\n        # Place bottle1 at left target\n        self.move(\n            self.place_actor(\n                actor=self.bottle1,\n                arm_tag=left_arm,\n                target_pose=self.left_target_pose,\n                functional_point_id=0,\n                pre_dis=0.1,\n                dis=0,\n                is_open=False\n            )\n        )\n        \n        # Place bottle2 at right target\n        self.move(\n            self.place_actor(\n                actor=self.bottle2,\n                arm_tag=right_arm,\n                target_pose=self.right_target_pose,\n                functional_point_id=0,\n                pre_dis=0.1,\n                dis=0,\n                is_open=False\n            )\n        )\n",
+  "best_run_records": [
+    "success!",
+    "success!",
+    "success!",
+    "success!",
+    "success!",
+    "Plan execution failed",
+    "Plan execution failed",
+    "success!",
+    "Plan execution failed",
+    "success!"
+  ],
+  "all_attempts": [
+    {
+      "attempt_id": 1,
+      "success_rate": 0.7,
+      "error_message": "Plan execution failed",
+      "error_count": 3,
+      "code": "\nfrom envs._base_task import Base_Task\nfrom envs.pick_dual_bottles import pick_dual_bottles\nfrom envs.utils import *\nimport sapien\n\nclass gpt_pick_dual_bottles(pick_dual_bottles):\n    def play_once(self):\n        # grasping both bottles\n        left_arm = ArmTag(\"left\")\n        right_arm = ArmTag(\"right\")\n        \n        # Grasp bottle1 with left arm\n        self.move(\n            self.grasp_actor(\n                actor=self.bottle1,\n                arm_tag=left_arm,\n                pre_grasp_dis=0.1,\n                grasp_dis=0\n            )\n        )\n        \n        # Grasp bottle2 with right arm\n        self.move(\n            self.grasp_actor(\n                actor=self.bottle2,\n                arm_tag=right_arm,\n                pre_grasp_dis=0.1,\n                grasp_dis=0\n            )\n        )\n        \n        # placing both bottles at their targets with grippers closed\n        # Place bottle1 at left target\n        self.move(\n            self.place_actor(\n                actor=self.bottle1,\n                arm_tag=left_arm,\n                target_pose=self.left_target_pose,\n                functional_point_id=0,\n                pre_dis=0.1,\n                dis=0,\n                is_open=False\n            )\n        )\n        \n        # Place bottle2 at right target\n        self.move(\n            self.place_actor(\n                actor=self.bottle2,\n                arm_tag=right_arm,\n                target_pose=self.right_target_pose,\n                functional_point_id=0,\n                pre_dis=0.1,\n                dis=0,\n                is_open=False\n            )\n        )\n",
+      "run_records": [
+        "success!",
+        "success!",
+        "success!",
+        "success!",
+        "success!",
+        "Plan execution failed",
+        "Plan execution failed",
+        "success!",
+        "Plan execution failed",
+        "success!"
+      ]
+    }
+  ]
+}

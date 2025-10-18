@@ -52,7 +52,7 @@ class gpt_{task_name}({task_name}):
         pass
         '''
         file_name = f"envs_gen/gpt_{task_name}.py"
-        with open(file_name, 'w') as file:
+        with open(file_name, 'w',encoding='utf-8') as file:
             file.write(res)
         
         # Construct full prompt with all necessary information
@@ -69,7 +69,7 @@ class gpt_{task_name}({task_name}):
     message.append({"role": "user", "content": Prompt})
 
     # Generate code using the model
-    res = generate(message, gpt="deepseek", temperature=0)
+    res = generate(message, gpt="pangu", temperature=0)
     
     # Extract the relevant portion of the generated code
     res = f'''
@@ -83,15 +83,16 @@ class gpt_{task_name}({task_name}):
     
     # Save generated code to file
     file_name = f"envs_gen/gpt_{task_name}.py"
-    with open(file_name, 'w') as file:
+    with open(file_name, 'w',encoding='utf-8') as file:
         file.write(res)
     
     print("Task Name: ", task_name)
     print("Task Description: ", task_description)
     
-    task, args = setup_task_config(task_name)
+    
     
     try:
+        task, args = setup_task_config(task_name)
         # Update this section to match the new return values of the run function
         success_rate, error_message, error_count, run_records = run(task, args)
         
@@ -103,7 +104,7 @@ class gpt_{task_name}({task_name}):
         import traceback
         error_trace = traceback.format_exc()
         print(f"Error occurred during testing: {e}\n{error_trace}")
-        return res, 0, f"Error occurred during testing: {e}", 20
+        return res, 0, f"Error occurred during testing: {e}", 20,"fail"
 
 
 def main(task_info_dic):
@@ -111,7 +112,7 @@ def main(task_info_dic):
     # Initialize variables
     task_info = now_task_info = task_info_dic
     messages = [{"role": "system", "content": "You need to generate relevant code for some robot tasks in a robot simulation environment based on the provided API."}]
-    generate_num = 5
+    generate_num = 10
     success_threshold = 0.5
     las_error_message = None
     suc_list = []
@@ -188,14 +189,14 @@ The task can be accomplished only through the existing API and example function,
         task_name = task_info['task_name']
         file_name = f"envs_gen/gpt_{task_name}.py"
         print(f"Saving best code, success rate: {best_success_rate}")
-        with open(file_name, 'w') as file:
+        with open(file_name, 'w',encoding='utf-8') as file:
             file.write(best_code)
     
     print(f"Best success rate: {best_success_rate}")
     print(f"All success rates: {suc_list}")
     
     # Save log data to file
-    with open(log_filename, 'w') as log_file:
+    with open(log_filename, 'w',encoding='utf-8') as log_file:
         log_data = {
             "task_name": task_info['task_name'],
             "task_description": task_info['task_description'],
