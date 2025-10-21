@@ -40,7 +40,7 @@ def generate_code_once(task_info):
     ]
 
     # Generate code from model
-    res = generate(message, gpt="deepseek", temperature=0)
+    res = generate(message, gpt="qwen", temperature=0)
 
     # Extract the relevant portion of the generated code
     res = f'''

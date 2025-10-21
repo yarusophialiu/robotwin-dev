@@ -1,0 +1,42 @@
+{
+  "task_name": "beat_block_hammer",
+  "task_description": "Pick up the hammer and use it to beat the block on the table once. The hammer is placed at a fixed position on the table,                         but the block is generated randomly on the table. If the block's x coordinate (dim 0) is greater than 0, use the right arm to grasp the hammer,                         else use the left arm. To beat the block, you should place the hammer on the block's functional point                         (i.e., use the place_actor API to align the hammer's contact point with the block's functional point).                         Note: You don't need to Lift the hammer after beating the block, and you don't need to open the gripper or return the arm to origin position.",
+  "best_success_rate": 0.5,
+  "success_rates": [
+    0.5
+  ],
+  "best_code": "\nfrom envs._base_task import Base_Task\nfrom envs.beat_block_hammer import beat_block_hammer\nfrom envs.utils import *\nimport sapien\n\nclass gpt_beat_block_hammer(beat_block_hammer):\n    def play_once(self):\n        # Step 1: Get the block's position to determine which arm to use\n        block_pose = self.block.get_pose()\n        block_position = block_pose.p\n        arm_tag = ArmTag(\"right\" if block_position[0] > 0 else \"left\")\n\n        # Step 2: Grasp the hammer with the selected arm\n        grasp_actions = self.grasp_actor(\n            actor=self.hammer,\n            arm_tag=arm_tag,\n            pre_grasp_dis=0.1,\n            grasp_dis=0,\n            gripper_pos=0.0\n        )\n        self.move(grasp_actions)\n\n        # Step 3: Place the hammer on the block's top functional point\n        block_top_pose = self.block.get_functional_point(1, 'pose')\n        place_actions = self.place_actor(\n            actor=self.hammer,\n            arm_tag=arm_tag,\n            target_pose=block_top_pose,\n            functional_point_id=0,  # Align the hammer's head (functional point 0) with the block's top\n            pre_dis=0.1,\n            dis=0.0,\n            is_open=False,\n            pre_dis_axis='fp'\n        )\n        self.move(place_actions)\n",
+  "best_run_records": [
+    "Plan execution failed",
+    "success!",
+    "Plan execution failed",
+    "success!",
+    "Plan execution failed",
+    "success!",
+    "The target position of the object is incorrect.",
+    "success!",
+    "success!",
+    "Plan execution failed"
+  ],
+  "all_attempts": [
+    {
+      "attempt_id": 1,
+      "success_rate": 0.5,
+      "error_message": "Plan execution failed",
+      "error_count": 4,
+      "code": "\nfrom envs._base_task import Base_Task\nfrom envs.beat_block_hammer import beat_block_hammer\nfrom envs.utils import *\nimport sapien\n\nclass gpt_beat_block_hammer(beat_block_hammer):\n    def play_once(self):\n        # Step 1: Get the block's position to determine which arm to use\n        block_pose = self.block.get_pose()\n        block_position = block_pose.p\n        arm_tag = ArmTag(\"right\" if block_position[0] > 0 else \"left\")\n\n        # Step 2: Grasp the hammer with the selected arm\n        grasp_actions = self.grasp_actor(\n            actor=self.hammer,\n            arm_tag=arm_tag,\n            pre_grasp_dis=0.1,\n            grasp_dis=0,\n            gripper_pos=0.0\n        )\n        self.move(grasp_actions)\n\n        # Step 3: Place the hammer on the block's top functional point\n        block_top_pose = self.block.get_functional_point(1, 'pose')\n        place_actions = self.place_actor(\n            actor=self.hammer,\n            arm_tag=arm_tag,\n            target_pose=block_top_pose,\n            functional_point_id=0,  # Align the hammer's head (functional point 0) with the block's top\n            pre_dis=0.1,\n            dis=0.0,\n            is_open=False,\n            pre_dis_axis='fp'\n        )\n        self.move(place_actions)\n",
+      "run_records": [
+        "Plan execution failed",
+        "success!",
+        "Plan execution failed",
+        "success!",
+        "Plan execution failed",
+        "success!",
+        "The target position of the object is incorrect.",
+        "success!",
+        "success!",
+        "Plan execution failed"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "task_name": "place_object_scale",
+  "task_description": "Use one arm to grab the object and put it on the scale.                        Grasp the object with the selected arm. Place the object on the scale.\\ ",
+  "best_success_rate": 0.8,
+  "success_rates": [
+    0.8
+  ],
+  "best_code": "\nfrom envs._base_task import Base_Task\nfrom envs.place_object_scale import place_object_scale\nfrom envs.utils import *\nimport sapien\n\nclass gpt_place_object_scale(place_object_scale):\n    def play_once(self):\n                        PLACEHOLDER= None\n                        #object to pick and place, you need change PLACEHOLDER to the actual object variable in the task\n                        object= self.object\n                        pre_grasp_dis=0.1\n                        grasp_dis=0\n                        contract_point_id_grasp=None  \n                        move_by_displacement_z=0.07\n                        target= self.scale\n                        target_func_point_id=0\n                        functional_point_id=0\n                        place_pre_dis=0.1\n                        place_dis=0.02\n\n                        object_pose = object.get_pose().p\n                        target_pose = target.get_functional_point(functional_point_id)\n                        # Select arm based on object's x position (right if positive, left if negative)\n                        self.arm_tag = ArmTag(\"right\" if object_pose[0] > 0 else \"left\")\n\n                        # Grasp the object using selected arm with specific contact point\n                        self.move(\n                            self.grasp_actor(\n                                object,\n                                arm_tag=self.arm_tag,\n                                contact_point_id=contract_point_id_grasp,\n                                pre_grasp_dis=pre_grasp_dis,\n                                grasp_dis=grasp_dis,\n                            ))\n                        # Lift the object up along z-axis\n                        self.move(self.move_by_displacement(self.arm_tag, z=move_by_displacement_z, move_axis=\"world\"))\n\n                        # Place the object onto the functional point\n                        self.move(\n                            self.place_actor(\n                                object,\n                                arm_tag=self.arm_tag,\n                                target_pose=target_pose,\n                                pre_dis=place_pre_dis,\n                                dis=place_dis,\n                            ))\n                        # Move the arm up by 0.1m after placing\n                        self.move(self.move_by_displacement(self.arm_tag, z=0.1, move_axis=\"arm\"))\n",
+  "best_run_records": [
+    "success!",
+    "success!",
+    "success!",
+    "success!",
+    "success!",
+    "success!",
+    "Plan execution failed",
+    "Plan execution failed",
+    "success!",
+    "success!"
+  ],
+  "all_attempts": [
+    {
+      "attempt_id": 1,
+      "success_rate": 0.8,
+      "error_message": "Plan execution failed",
+      "error_count": 2,
+      "code": "\nfrom envs._base_task import Base_Task\nfrom envs.place_object_scale import place_object_scale\nfrom envs.utils import *\nimport sapien\n\nclass gpt_place_object_scale(place_object_scale):\n    def play_once(self):\n                        PLACEHOLDER= None\n                        #object to pick and place, you need change PLACEHOLDER to the actual object variable in the task\n                        object= self.object\n                        pre_grasp_dis=0.1\n                        grasp_dis=0\n                        contract_point_id_grasp=None  \n                        move_by_displacement_z=0.07\n                        target= self.scale\n                        target_func_point_id=0\n                        functional_point_id=0\n                        place_pre_dis=0.1\n                        place_dis=0.02\n\n                        object_pose = object.get_pose().p\n                        target_pose = target.get_functional_point(functional_point_id)\n                        # Select arm based on object's x position (right if positive, left if negative)\n                        self.arm_tag = ArmTag(\"right\" if object_pose[0] > 0 else \"left\")\n\n                        # Grasp the object using selected arm with specific contact point\n                        self.move(\n                            self.grasp_actor(\n                                object,\n                                arm_tag=self.arm_tag,\n                                contact_point_id=contract_point_id_grasp,\n                                pre_grasp_dis=pre_grasp_dis,\n                                grasp_dis=grasp_dis,\n                            ))\n                        # Lift the object up along z-axis\n                        self.move(self.move_by_displacement(self.arm_tag, z=move_by_displacement_z, move_axis=\"world\"))\n\n                        # Place the object onto the functional point\n                        self.move(\n                            self.place_actor(\n                                object,\n                                arm_tag=self.arm_tag,\n                                target_pose=target_pose,\n                                pre_dis=place_pre_dis,\n                                dis=place_dis,\n                            ))\n                        # Move the arm up by 0.1m after placing\n                        self.move(self.move_by_displacement(self.arm_tag, z=0.1, move_axis=\"arm\"))\n",
+      "run_records": [
+        "success!",
+        "success!",
+        "success!",
+        "success!",
+        "success!",
+        "success!",
+        "Plan execution failed",
+        "Plan execution failed",
+        "success!",
+        "success!"
+      ]
+    }
+  ]
+}

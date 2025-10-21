@@ -8,6 +8,7 @@ In the world coordinate system, the positive directions of the xyz coordinate ax
 and upper sides are [1,0,0], [0,1,0], [0,0,1] respectively. In the same way, we can get the unit vectors of the left side, back side and down side.
 Each actor in the environment has one or more functional points, which are specific locations designed for interactions. 
 Access functional points using actor.get_functional_point(point_id, return_type), where return_type can be "pose", "p", or "q".
+You can only change the params initailized with PLACEHOLDER in the play_once function, other parts of the code should not be changed.
 Please do not generate any thinking process or comments in the code, only provide the code directly.
 '''
 

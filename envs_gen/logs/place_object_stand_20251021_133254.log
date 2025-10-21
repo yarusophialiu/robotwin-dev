@@ -1,0 +1,42 @@
+{
+  "task_name": "place_object_stand",
+  "task_description": "Use appropriate arm to place the object on the stand.                        Grasp the object with the specified arm. Place the object onto the display stand.                        Note: Don't use functional_point_id and pre_dis_axis='fp', because the object can be any object that is specified in the task.",
+  "best_success_rate": 0.8,
+  "success_rates": [
+    0.8
+  ],
+  "best_code": "\nfrom envs._base_task import Base_Task\nfrom envs.place_object_stand import place_object_stand\nfrom envs.utils import *\nimport sapien\n\nclass gpt_place_object_stand(place_object_stand):\n    def play_once(self):\n        # Define the object to pick and place\n        object = self.object\n        # Define the target display stand\n        target = self.displaystand\n        \n        # Set parameters for grasping\n        pre_grasp_dis = 0.1  # Pre-grasp distance\n        grasp_dis = 0  # Grasping distance\n        move_by_displacement_z = 0.07  # Lift distance after grasping\n        \n        # Set parameters for placing\n        target_func_point_id = 0  # Functional point ID for the display stand\n        place_pre_dis = 0.1  # Pre-place distance\n        place_dis = 0.02  # Final placement distance\n        \n        # Get object position to select appropriate arm\n        object_pose = object.get_pose().p\n        # Get target pose from display stand's functional point\n        target_pose = target.get_functional_point(target_func_point_id, \"pose\")\n        \n        # Select arm based on object's x position (right if positive, left if negative)\n        arm_tag = ArmTag(\"right\" if object_pose[0] > 0 else \"left\")\n        \n        # Grasp the object using selected arm\n        self.move(\n            self.grasp_actor(\n                actor=object,\n                arm_tag=arm_tag,\n                pre_grasp_dis=pre_grasp_dis,\n                grasp_dis=grasp_dis,\n            ))\n        \n        # Lift the object up along z-axis to avoid collisions\n        self.move(\n            self.move_by_displacement(\n                arm_tag=arm_tag, \n                z=move_by_displacement_z, \n                move_axis=\"world\"\n            ))\n        \n        # Place the object onto the display stand's functional point\n        self.move(\n            self.place_actor(\n                actor=object,\n                target_pose=target_pose,\n                arm_tag=arm_tag,\n                functional_point_id=None,  # Don't use functional_point_id as specified in task\n                pre_dis=place_pre_dis,\n                dis=place_dis,\n                is_open=True,\n                constrain=\"free\",  # Use free alignment as specified\n                pre_dis_axis=\"grasp\"  # Use grasp direction instead of functional point\n            ))\n        \n        # Move the arm up after placing to avoid collision\n        self.move(\n            self.move_by_displacement(\n                arm_tag=arm_tag, \n                z=0.1, \n                move_axis=\"world\"\n            ))\n",
+  "best_run_records": [
+    "success!",
+    "success!",
+    "The target position of the object is incorrect.",
+    "success!",
+    "success!",
+    "success!",
+    "Plan execution failed",
+    "success!",
+    "success!",
+    "success!"
+  ],
+  "all_attempts": [
+    {
+      "attempt_id": 1,
+      "success_rate": 0.8,
+      "error_message": "The target position of the object is incorrect.",
+      "error_count": 1,
+      "code": "\nfrom envs._base_task import Base_Task\nfrom envs.place_object_stand import place_object_stand\nfrom envs.utils import *\nimport sapien\n\nclass gpt_place_object_stand(place_object_stand):\n    def play_once(self):\n        # Define the object to pick and place\n        object = self.object\n        # Define the target display stand\n        target = self.displaystand\n        \n        # Set parameters for grasping\n        pre_grasp_dis = 0.1  # Pre-grasp distance\n        grasp_dis = 0  # Grasping distance\n        move_by_displacement_z = 0.07  # Lift distance after grasping\n        \n        # Set parameters for placing\n        target_func_point_id = 0  # Functional point ID for the display stand\n        place_pre_dis = 0.1  # Pre-place distance\n        place_dis = 0.02  # Final placement distance\n        \n        # Get object position to select appropriate arm\n        object_pose = object.get_pose().p\n        # Get target pose from display stand's functional point\n        target_pose = target.get_functional_point(target_func_point_id, \"pose\")\n        \n        # Select arm based on object's x position (right if positive, left if negative)\n        arm_tag = ArmTag(\"right\" if object_pose[0] > 0 else \"left\")\n        \n        # Grasp the object using selected arm\n        self.move(\n            self.grasp_actor(\n                actor=object,\n                arm_tag=arm_tag,\n                pre_grasp_dis=pre_grasp_dis,\n                grasp_dis=grasp_dis,\n            ))\n        \n        # Lift the object up along z-axis to avoid collisions\n        self.move(\n            self.move_by_displacement(\n                arm_tag=arm_tag, \n                z=move_by_displacement_z, \n                move_axis=\"world\"\n            ))\n        \n        # Place the object onto the display stand's functional point\n        self.move(\n            self.place_actor(\n                actor=object,\n                target_pose=target_pose,\n                arm_tag=arm_tag,\n                functional_point_id=None,  # Don't use functional_point_id as specified in task\n                pre_dis=place_pre_dis,\n                dis=place_dis,\n                is_open=True,\n                constrain=\"free\",  # Use free alignment as specified\n                pre_dis_axis=\"grasp\"  # Use grasp direction instead of functional point\n            ))\n        \n        # Move the arm up after placing to avoid collision\n        self.move(\n            self.move_by_displacement(\n                arm_tag=arm_tag, \n                z=0.1, \n                move_axis=\"world\"\n            ))\n",
+      "run_records": [
+        "success!",
+        "success!",
+        "The target position of the object is incorrect.",
+        "success!",
+        "success!",
+        "success!",
+        "Plan execution failed",
+        "success!",
+        "success!",
+        "success!"
+      ]
+    }
+  ]
+}
