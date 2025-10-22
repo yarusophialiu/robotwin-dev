@@ -5,52 +5,49 @@ from envs.utils import *
 import sapien
 
 class gpt_place_shoe(place_shoe):
+    
     def play_once(self):
-        # Initialize actors from the actor_list
-        self.shoe = self.actor_list['self.shoe']
-        self.target_block = self.actor_list['self.target_block']
-        
-        # Grasp parameters
-        pre_grasp_dis = 0.1
-        grasp_dis = 0
-        contract_point_id_grasp = [0, 1]  # Use shoe's contact points
-        move_by_displacement_z = 0.07  # Lift height
-        target_func_point_id = 0  # Target block's bottom functional point
-        functional_point_id = 0  # Shoe's bottom functional point
-        place_pre_dis = 0.1
-        place_dis = 0.02
+        PLACEHOLDER= None
+        #object to pick and place, you need change PLACEHOLDER to the actual object variable in the task
+        tgt_object=self.shoe
+        pre_grasp_dis=0.1
+        grasp_dis=0
+        contract_point_id_grasp=[0, 1]
+        move_by_displacement_z=0.07
+        target=self.target_block
+        target_func_point_id=1
+        functional_point_id=0
+        place_pre_dis=0.1
+        place_dis=0.02
 
-        # Get shoe's position to determine arm
-        object_pose = self.shoe.get_pose().p
+        # don't change any code below this line,only need to change PLACEHOLDER above
+                        
+        object_pose = tgt_object.get_pose().p
+        target_pose = target.get_functional_point(target_func_point_id)
+        # Select arm based on object's x position (right if positive, left if negative)
         self.arm_tag = ArmTag("right" if object_pose[0] > 0 else "left")
 
-        # Grasp shoe using contact points
+        # Grasp the object using selected arm with specific contact point
         self.move(
             self.grasp_actor(
-                actor=self.shoe,
+                tgt_object,
                 arm_tag=self.arm_tag,
                 contact_point_id=contract_point_id_grasp,
                 pre_grasp_dis=pre_grasp_dis,
                 grasp_dis=grasp_dis,
-            )
-        )
+            ))
+        # Lift the object up along z-axis
+        self.move(self.move_by_displacement(self.arm_tag, z=move_by_displacement_z, move_axis="arm"))
 
-        # Lift the grasped object
-        self.move(self.move_by_displacement(arm_tag=self.arm_tag, z=move_by_displacement_z, move_axis="arm"))
-
-        # Place shoe on target block's bottom
+        # Place the object onto the functional point
         self.move(
             self.place_actor(
-                actor=self.shoe,
+                tgt_object,
+                target_pose=target_pose,
                 arm_tag=self.arm_tag,
-                target_pose=self.target_block.get_functional_point(target_func_point_id),
-                functional_point_id=functional_point_id,
                 pre_dis=place_pre_dis,
                 dis=place_dis,
-                constrain="align",  # Ensure full pose alignment
-                pre_dis_axis="fp",  # Use functional point direction
-            )
-        )
-
-        # Clear arms to origin
-        self.move(self.back_to_origin(arm_tag=self.arm_tag))
+                functional_point_id=functional_point_id,
+            ))
+        # Move the arm up by 0.1m after placing
+        self.move(self.move_by_displacement(self.arm_tag, z=0.1, move_axis="arm"))

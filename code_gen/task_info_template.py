@@ -33,7 +33,6 @@ TASK_NAME = {
 # These tasks are used to debug and iterate on prompt design.
 # Prompt instructions have been specifically adjusted for them.
 PICK_AND_PLACE_CODE_EXAMPLE = """
-class gpt_place_object_stand(place_object_stand):
     def play_once(self):
         PLACEHOLDER= None
         #object to pick and place, you need change PLACEHOLDER to the actual object variable in the task
@@ -80,6 +79,19 @@ class gpt_place_object_stand(place_object_stand):
         # Move the arm up by 0.1m after placing
         self.move(self.move_by_displacement(self.arm_tag, z=0.1, move_axis="arm"))
 """
+
+PICK_AND_PLACE_JSON={
+    "tgt_object": None,
+    "pre_grasp_dis":  None,
+    "grasp_dis":  None,
+    "contract_point_id_grasp":  None,
+    "move_by_displacement_z":  None,
+    "target":  None,
+    "target_func_point_id":  None,
+    "functional_point_id":  None,
+    "place_pre_dis":  None,
+    "place_dis":  None
+}
 
 BEAT_BLOCK_HAMMER = {
     "task_name": "beat_block_hammer",

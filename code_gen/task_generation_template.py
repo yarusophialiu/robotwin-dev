@@ -8,9 +8,61 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from gpt_agent import *
 from prompt_template import *
 from task_info_template import *
-from test_gen_code import *  
-
+from test_gen_code import * 
 import argparse
+
+
+# 定义所有需要替换的参数键
+REQUIRED_KEYS = [
+    'tgt_object',
+    'pre_grasp_dis',
+    'grasp_dis',
+    'contract_point_id_grasp',
+    'move_by_displacement_z',
+    'target',
+    'target_func_point_id',
+    'functional_point_id',
+    'place_pre_dis',
+    'place_dis'
+]
+
+def generate_pick_and_place_code(json_string: str) -> str:    
+    # 1. 尝试解析JSON
+    try:
+        if "```json" in json_string:
+            parts = json_string.split("```json")
+            # 取分割后的第二部分，再去除结尾的```标记及可能的空白字符
+            json_string = parts[1].rsplit("```", 1)[0].strip()
+        params = json.loads(json_string)
+    except json.JSONDecodeError as e:
+        print(json_string)
+        raise ValueError(f"Invalid JSON format provided. Error: {e}")
+
+    # 2. 检查是否为字典
+    if not isinstance(params, dict):
+        raise ValueError(f"Invalid JSON type. Expected a dictionary (object), but got {type(params).__name__}.")
+
+    # 3. 检查所有必需的键
+    missing_keys = []
+    for key in REQUIRED_KEYS:
+        if key not in params:
+            missing_keys.append(key)
+            
+    if missing_keys:
+        raise ValueError(f"Missing required parameters in JSON: {', '.join(missing_keys)}")
+
+    # 4. 生成代码
+    code = PICK_AND_PLACE_CODE_EXAMPLE
+    
+    for key in REQUIRED_KEYS:
+        value = params[key]
+                
+        placeholder_line = f"{key}=PLACEHOLDER"
+        replacement_line = f"{key}={value}"
+        
+        code = code.replace(placeholder_line, replacement_line)
+
+    return code,json_string
 
 def generate_code(task_info, las_error=None, message=None):
     """Generate code for robot task based on task info and previous errors."""
@@ -20,7 +72,7 @@ def generate_code(task_info, las_error=None, message=None):
     # Extract task information
     task_name = task_info['task_name']
     task_description = task_info['task_description']
-    current_code = task_info['current_code']
+    current_json=PICK_AND_PLACE_JSON
     
     # Get the enriched actor_list
     original_actor_list = task_info['actor_list']
@@ -62,7 +114,8 @@ class gpt_{task_name}({task_name}):
             f"# Actor List: \n{actor_list}\n\n"
             f"# Available API: \n{available_env_function}\n\n"
             f"# Function Example: \n{function_example}\n\n"
-            f"# Current Code:\n{current_code}"
+            f"# Code Template:\n{PICK_AND_PLACE_CODE_EXAMPLE}"
+            f"# Current Json:\n{current_json}"
         )
 
     # Add prompt to message history
@@ -72,6 +125,11 @@ class gpt_{task_name}({task_name}):
     res = generate(message, gpt="pangu", temperature=0)
     
     # Extract the relevant portion of the generated code
+    try:
+        res,json=generate_pick_and_place_code(res)
+    except ValueError as e:
+        return res,0,str(e),1,"fail"
+    current_json=json
     res = f'''
 from envs._base_task import Base_Task
 from envs.{task_name} import {task_name}
@@ -79,8 +137,7 @@ from envs.utils import *
 import sapien
 
 class gpt_{task_name}({task_name}):
-    ''' + res[res.find('def play_once'):res.rfind("```")]
-    
+    ''' + res
     # Save generated code to file
     file_name = f"envs_gen/gpt_{task_name}.py"
     with open(file_name, 'w',encoding='utf-8') as file:
@@ -89,8 +146,7 @@ class gpt_{task_name}({task_name}):
     print("Task Name: ", task_name)
     print("Task Description: ", task_description)
     
-    
-    
+
     try:
         task, args = setup_task_config(task_name)
         # Update this section to match the new return values of the run function
@@ -175,6 +231,7 @@ def main(task_info_dic):
         # Update task description and code for the next attempt
         print(f"Failed to generate code for task: {task_info['task_name']} {id}\nError massage: \n{las_error_message}")
         change_info = """The error may be caused by: 
+1. you select the wrong target which not in actor list
 1. pre_dis_axis is not set correctly in the place_actor function; 
 2. the functional point is not set correctly in the place_actor function; 
 3. The pre_dis or dis is not set correctly in the place_actor function;

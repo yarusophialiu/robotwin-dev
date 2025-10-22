@@ -23,7 +23,7 @@ def generate(message, gpt="pangu", temperature=0):
     elif gpt == "pangu":
         print('Using OpenPangu model')
         MODEL="openPangu-Embedded-7B"
-        OPENAI_API_BASE = "https://notebook-inspire.sii.edu.cn/ws-9dcc0e1f-80a4-4af2-bc2f-0e352e7b17e6/project-3365c7ce-af12-4ea8-b5c3-5826e504190c/user-2af699bc-efc5-4399-a3be-ae961f37a7bb/vscode/b3f65e89-f416-429a-808e-253c01c15faf/472bedce-8378-48e4-a103-4099c49de026/proxy/8818/v1"
+        OPENAI_API_BASE = "https://notebook-inspire.sii.edu.cn/ws-9dcc0e1f-80a4-4af2-bc2f-0e352e7b17e6/project-3365c7ce-af12-4ea8-b5c3-5826e504190c/user-2af699bc-efc5-4399-a3be-ae961f37a7bb/vscode/b3f65e89-f416-429a-808e-253c01c15faf/aefded10-dc68-42d1-a8c4-99c0399c5671/proxy/8818/v1"
         OPENAI_API_KEY = "EMPTY"
         client = OpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_API_BASE)
         
