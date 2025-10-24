@@ -122,7 +122,8 @@ class gpt_{task_name}({task_name}):
     message.append({"role": "user", "content": Prompt})
 
     # Generate code using the model
-    res = generate(message, gpt="pangu", temperature=0)
+    # res = generate(message, gpt="pangu", temperature=0)
+    res = generate(message, gpt="deepseek", temperature=0)
     
     # Extract the relevant portion of the generated code
     try:
@@ -290,5 +291,5 @@ if __name__ == "__main__":
 
 """
 Usage:
-python code_gen/task_generation.py task_name
+python code_gen/task_generation.py place_object_stand
 """
